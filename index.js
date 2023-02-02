@@ -15,7 +15,7 @@ app.get("/", function (req, res) {
 app.post("/api/upload",
     fileUpload({
         limits: {
-            fileSize: 8 * 1024 ** 2
+            fileSize: 8 * 1024 ** 2 + 1
         },
         abortOnLimit: true
     }), async (req, res) => {

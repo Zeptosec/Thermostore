@@ -11,13 +11,17 @@ client.login(process.env.TOKEN);
  */
 export async function saveFile(file) {
     if (client.isReady) {
-        let msg = await client.channels.cache.get(process.env.CHANNEL_ID).send({
-            files: [{
-                attachment: file.data,
-                name: "blob"
-            }]
-        })
-            .catch(console.error);
+        let chan = client.channels.cache.find(c => c.id === process.env.CHANNEL_ID);
+        let msg;
+        if (!chan) return null;
+        else {
+            msg = await chan.send({
+                files: [{
+                    attachment: file.data,
+                    name: "blob"
+                }]
+            })
+        }
         let uploaded = await msg.attachments.map(a => a.url);
         return uploaded[0];
     } else {
