@@ -22,10 +22,13 @@ app.post("/api/upload",
         if (!req.files) {
             return res.status(400).json({ msg: 'No files were uploaded.' });
         }
+        if (Array.isArray(req.files.file))
+            return res.status(400).json({ msg: "Upload one file at a time" });
         const file = req.files.file;
-        if (file.size*2 > os.freemem()) {
+        if (file.size * 2 > os.freemem()) {
             return res.status(406).send({ msg: 'There is not enough memory available to upload this file' });
         }
+
         const rs = await saveFile(req.files.file)
         if (rs) {
             const parts = rs.split('/');
